@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin id="cordova-plugin-embedded-barcode-reader" version="0.9.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <name>cordova-plugin-embedded-barcode-reader</name>
+  <description>Cordova plugin that allows barcode reading from HTML code. Show camera preview popup on top of the HTML.</description>
+  <license>Apache 2.0</license>
+  <keywords>cordova,phonegap,ecosystem:cordova,cordova-android,cordova-ios,android,ios,ionic,camera,cam,camera-preview,preview</keywords>
+  <repo>https://github.com/CodifiLLC/cordova-plugin-embedded-barcode-reader/cordova-plugin-embedded-barcode-reader.git</repo>
+  <issue>https://github.com/CodifiLLC/cordova-plugin-embedded-barcode-reader/cordova-plugin-embedded-barcode-reader/issues</issue>
+
+  <js-module src="www/CameraPreview.js" name="CameraPreview">
+    <clobbers target="CameraPreview" />
+  </js-module>
+
+  <platform name="android">
+    <source-file src="src/android/CameraPreview.java" target-dir="src/us/codifi/embeddedbarcodereader" />
+    <source-file src="src/android/EmbedQRReader.java" target-dir="src/us/codifi/embeddedbarcodereader" />
+    <source-file src="src/android/continuous_scan.xml" target-dir="res/layout" />
+
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="CameraPreview">
+        <param name="android-package" value="us.codifi.embeddedbarcodereader.CameraPreview" />
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/manifest">
+      <uses-feature android:name="android.hardware.camera" />
+      <uses-feature android:name="android.hardware.camera.autofocus" />
+      <uses-permission android:name="android.permission.CAMERA" />
+    </config-file>
+
+    <framework src="com.google.zxing:core:3.2.0" />
+    <framework src="com.journeyapps:zxing-android-embedded:3.5.0" />
+  </platform>
+
+</plugin>

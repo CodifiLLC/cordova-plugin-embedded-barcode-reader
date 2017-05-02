@@ -1,0 +1,38 @@
+{
+  "name": "cordova-plugin-embedded-barcode-reader",
+  "version": "0.0.9",
+  "description": "Cordova plugin that allows barcode reader interaction from HTML code for showing barcode reader preview below or on top of the HTML.",
+  "keywords": [
+    "cordova",
+    "phonegap",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "android",
+    "ios",
+    "ionic",
+    "barcode",
+    "barcode-reader",
+    "qr",
+    "qr-reader",
+    "camera",
+    "cam",
+    "camera-preview",
+    "preview"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CodifiLLC/cordova-plugin-embedded-barcode-reader"
+  },
+  "author": {
+    "name": "Matthew Dickinson",
+    "email": "matt@codifi.us",
+    "url": "codifi.us"
+  },
+  "license": "Apache 2.0",
+  "homepage": "https://github.com/CodifiLLC/cordova-plugin-embedded-barcode-reader",
+  "dependencies": {
+    "cordova": "*"
+  },
+  "devDependencies": {}
+}
