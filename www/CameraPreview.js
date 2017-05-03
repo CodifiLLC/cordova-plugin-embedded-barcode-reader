@@ -1,4 +1,3 @@
-cordova.define("cordova-plugin-embedded-barcode-reader.CameraPreview", function(require, exports, module) {
 var argscheck = require('cordova/argscheck'),
     utils = require('cordova/utils'),
     exec = require('cordova/exec');
@@ -72,4 +71,3 @@ CameraPreview.CAMERA_DIRECTION = {
 };
 
 module.exports = CameraPreview;
-});
