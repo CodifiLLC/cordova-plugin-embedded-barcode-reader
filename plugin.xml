@@ -9,18 +9,18 @@
   <repo>https://github.com/CodifiLLC/cordova-plugin-embedded-barcode-reader/cordova-plugin-embedded-barcode-reader.git</repo>
   <issue>https://github.com/CodifiLLC/cordova-plugin-embedded-barcode-reader/cordova-plugin-embedded-barcode-reader/issues</issue>
 
-  <js-module src="www/CameraPreview.js" name="CameraPreview">
-    <clobbers target="CameraPreview" />
+  <js-module src="www/EmbeddedBarcodeReader.js" name="EmbeddedBarcodeReader">
+    <clobbers target="EmbeddedBarcodeReader" />
   </js-module>
 
   <platform name="android">
-    <source-file src="src/android/CameraPreview.java" target-dir="src/us/codifi/embeddedbarcodereader" />
+    <source-file src="src/android/EmbeddedBarcodeReader.java" target-dir="src/us/codifi/embeddedbarcodereader" />
     <source-file src="src/android/EmbedQRReader.java" target-dir="src/us/codifi/embeddedbarcodereader" />
     <source-file src="src/android/continuous_scan.xml" target-dir="res/layout" />
 
     <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="CameraPreview">
-        <param name="android-package" value="us.codifi.embeddedbarcodereader.CameraPreview" />
+      <feature name="EmbeddedBarcodeReader">
+        <param name="android-package" value="us.codifi.embeddedbarcodereader.EmbeddedBarcodeReader" />
         <param name="onload" value="true" />
       </feature>
     </config-file>

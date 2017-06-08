@@ -1,4 +1,4 @@
-interface CameraPreview {
+interface EmbeddedBarcodeReader {
   addBarcodeReadListener(onSuccess?:any, onError?:any):any;
   startCamera(options?:any, onSuccess?:any, onError?:any):any;
   stopCamera(onSuccess?:any, onError?:any):any;

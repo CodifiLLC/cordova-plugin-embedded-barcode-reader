@@ -16,9 +16,9 @@ import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class CameraPreview extends CordovaPlugin implements EmbedQRReader.BarCodeReadListener {
+public class EmbeddedBarcodeReader extends CordovaPlugin implements EmbedQRReader.BarCodeReadListener {
 
-	private static final String TAG = "CameraPreview";
+	private static final String TAG = "EmbeddedBarcodeReader";
 
 	private static final String SUPPORTED_FLASH_MODES_ACTION = "getSupportedFlashModes";
 	private static final String FLASH_MODE_ACTION = "setFlashMode";
@@ -44,7 +44,7 @@ public class CameraPreview extends CordovaPlugin implements EmbedQRReader.BarCod
 
 	private int containerViewId = 1;
 
-	public CameraPreview() {
+	public EmbeddedBarcodeReader() {
 		super();
 		Log.d(TAG, "Constructing");
 	}
@@ -134,7 +134,7 @@ public class CameraPreview extends CordovaPlugin implements EmbedQRReader.BarCod
 
 		fragment = new EmbedQRReader();
 		fragment.setEventListener(this);
-		//fragment.defaultCamera = defaultCamera;
+		fragment.defaultCamera = defaultCamera;
 
 		DisplayMetrics metrics = cordova.getActivity().getResources().getDisplayMetrics();
 		// offset
@@ -201,7 +201,7 @@ public class CameraPreview extends CordovaPlugin implements EmbedQRReader.BarCod
 	}
 
 	public void onBarcodeError(String message) {
-		Log.d(TAG, "CameraPreview onBarcodeError");
+		Log.d(TAG, "EmbeddedBarcodeReader onBarcodeError");
 		if (this.readBarcodeCallbackContext != null) {
 			this.readBarcodeCallbackContext.error(message);
 		}
