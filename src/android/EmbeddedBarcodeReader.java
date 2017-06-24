@@ -23,7 +23,7 @@ public class EmbeddedBarcodeReader extends CordovaPlugin implements EmbedQRReade
 	private static final String SUPPORTED_FLASH_MODES_ACTION = "getSupportedFlashModes";
 	private static final String FLASH_MODE_ACTION = "setFlashMode";
 	private static final String START_CAMERA_ACTION = "startReading";
-	private static final String START_LISTENTING_ACTION = "startListening";
+	private static final String START_LISTENING_ACTION = "startListening";
 	private static final String STOP_CAMERA_ACTION = "stopReading";
 	private static final String SWITCH_CAMERA_ACTION = "switchCamera";
 	private static final String SHOW_CAMERA_ACTION = "showCamera";
@@ -70,8 +70,9 @@ public class EmbeddedBarcodeReader extends CordovaPlugin implements EmbedQRReade
 				this.execArgs = args;
 				Log.d(TAG, "requesting permission");
 				cordova.requestPermissions(this, CAM_REQ_CODE, permissions);
+				return true;
 			}
-		} else if (START_LISTENTING_ACTION.equals(action)) {
+		} else if (START_LISTENING_ACTION.equals(action)) {
 			//set the listener for the read events
 			this.readBarcodeCallbackContext = callbackContext;
 			return true;
@@ -110,7 +111,6 @@ public class EmbeddedBarcodeReader extends CordovaPlugin implements EmbedQRReade
 					this.execArgs.getBoolean(7),
 					this.execArgs.getString(8),
 					this.execCallback);
-			this.readBarcodeCallbackContext = execCallback;
 		}
 	}
 
