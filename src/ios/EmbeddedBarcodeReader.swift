@@ -110,8 +110,9 @@ import AVFoundation
     }
     
     func cameraWithPosition(position: AVCaptureDevicePosition) -> AVCaptureDevice? {
-        if let discoverySession = AVCaptureDeviceDiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaTypeVideo, position: .unspecified) {
-            for device in discoverySession.devices {
+        if let potentialDevices = AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) {
+            for device in potentialDevices {
+                let device = device as! AVCaptureDevice
                 if device.position == position {
                     return device
                 }
