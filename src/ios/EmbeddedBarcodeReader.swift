@@ -87,7 +87,6 @@ import AVFoundation
         // Check if the metadataObjects array is not nil and it contains at least one object.
         if metadataObjects == nil || metadataObjects.count == 0 {
             cameraPreview.qrCodeFrameView?.frame = CGRect.zero
-            print("No QR code found")
             return
         }
         
@@ -100,7 +99,6 @@ import AVFoundation
             cameraPreview.qrCodeFrameView?.frame = CGRect.init(x: self.xPoint + barCodeObject!.bounds.minX, y: self.yPoint + barCodeObject!.bounds.minY, width: barCodeObject!.bounds.width, height: barCodeObject!.bounds.height)
             
             if metadataObj.stringValue != nil {
-                print(metadataObj.stringValue)
                 if (self.barcodeReadCallback != nil) {
                     let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: metadataObj.stringValue)
                     commandDelegate!.send(pluginResult, callbackId:self.barcodeReadCallback)
