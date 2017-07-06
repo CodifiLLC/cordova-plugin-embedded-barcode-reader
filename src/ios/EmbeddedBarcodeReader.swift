@@ -3,12 +3,45 @@ import AVFoundation
 
 @objc(EmbeddedBarcodeReader) class EmbeddedBarcodeReader: CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
     
-    class CameraPreview: UIViewController {
+    class CameraPreview: UIView {
         var videoPreviewLayer:AVCaptureVideoPreviewLayer?
         var qrCodeFrameView:UIView?
         
-        override func viewDidLoad() {
-            super.viewDidLoad()
+        func interfaceOrientationToVideoOrientation(_ orientation : UIInterfaceOrientation) -> AVCaptureVideoOrientation {
+            switch (orientation) {
+            case UIInterfaceOrientation.portrait:
+                return AVCaptureVideoOrientation.portrait;
+            case UIInterfaceOrientation.portraitUpsideDown:
+                return AVCaptureVideoOrientation.portraitUpsideDown;
+            case UIInterfaceOrientation.landscapeLeft:
+                return AVCaptureVideoOrientation.landscapeLeft;
+            case UIInterfaceOrientation.landscapeRight:
+                return AVCaptureVideoOrientation.landscapeRight;
+            default:
+                return AVCaptureVideoOrientation.portraitUpsideDown;
+            }
+        }
+        
+        override func layoutSubviews() {
+            super.layoutSubviews();
+            if let sublayers = self.layer.sublayers {
+                for layer in sublayers {
+                    layer.frame = self.bounds;
+                }
+            }
+            
+            self.videoPreviewLayer?.connection.videoOrientation = interfaceOrientationToVideoOrientation(UIApplication.shared.statusBarOrientation);
+        }
+        
+        func addPreviewLayer() {
+            videoPreviewLayer!.frame = self.bounds
+            self.backgroundColor = UIColor.clear
+            self.layer.addSublayer(videoPreviewLayer!)
+        }
+        
+        func removePreviewLayer() {
+            self.videoPreviewLayer!.removeFromSuperlayer()
+            self.videoPreviewLayer = nil
         }
     }
     
@@ -21,8 +54,13 @@ import AVFoundation
     var width:CGFloat = 0.0
     var height:CGFloat = 0.0
     
+    override func pluginInitialize() {
+        super.pluginInitialize()
+        self.webView!.backgroundColor = UIColor.clear
+        self.webView!.isOpaque = false
+    }
+    
     func startReading(_ command: CDVInvokedUrlCommand) {
-        cameraPreview = CameraPreview();
         let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
 
         do {
@@ -49,14 +87,16 @@ import AVFoundation
             captureMetadataOutput.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
             
             // Initialize the video preview layer and add it as a sublayer to the viewPreview view's layer.
+            cameraPreview = CameraPreview(frame: CGRect(x: xPoint, y: yPoint, width: width, height: height));
             cameraPreview.videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             cameraPreview.videoPreviewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
             //            videoPreviewLayer?.frame = view.layer.bounds
-            cameraPreview.videoPreviewLayer?.frame = CGRect.init(x: xPoint, y: yPoint, width: width, height: height)
-            self.webView?.backgroundColor = UIColor.clear
-            self.webView?.isOpaque = false
-            self.webView?.layer.addSublayer(cameraPreview.videoPreviewLayer!)
-            self.webView.superview?.bringSubview(toFront: self.webView)
+            self.webView!.backgroundColor = UIColor.clear
+            self.webView!.isOpaque = false
+            self.webView!.superview!.addSubview(cameraPreview!)
+            self.webView!.superview!.bringSubview(toFront: self.webView)
+//            self.webView!.superview!.sendSubview(toBack: cameraPreview!)
+            cameraPreview.addPreviewLayer();
             
             // Start video capture.
             captureSession?.startRunning()
@@ -101,6 +141,7 @@ import AVFoundation
             if metadataObj.stringValue != nil {
                 if (self.barcodeReadCallback != nil) {
                     let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: metadataObj.stringValue)
+                    pluginResult!.setKeepCallbackAs(true)
                     commandDelegate!.send(pluginResult, callbackId:self.barcodeReadCallback)
                 }
             }
@@ -131,7 +172,7 @@ import AVFoundation
     func stopReading(_ command: CDVInvokedUrlCommand) {
         //stop camera
         captureSession?.stopRunning()
-        cameraPreview.videoPreviewLayer?.removeFromSuperlayer()
+        cameraPreview.removePreviewLayer()
         cameraPreview.videoPreviewLayer = nil
         self.barcodeReadCallback = nil
         let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "Camera Stopped")
