@@ -53,6 +53,8 @@ import AVFoundation
     var yPoint:CGFloat = 0.0
     var width:CGFloat = 0.0
     var height:CGFloat = 0.0
+    var lastRead:String = ""
+    var lastTimeRead: Date = Date.init()
     
     override func pluginInitialize() {
         super.pluginInitialize()
@@ -124,6 +126,9 @@ import AVFoundation
     
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
         
+        var newReadTime: Date
+        var milsSinceLastRead: Double
+        
         // Check if the metadataObjects array is not nil and it contains at least one object.
         if metadataObjects == nil || metadataObjects.count == 0 {
             cameraPreview.qrCodeFrameView?.frame = CGRect.zero
@@ -140,6 +145,14 @@ import AVFoundation
             
             if metadataObj.stringValue != nil {
                 if (self.barcodeReadCallback != nil) {
+                    newReadTime = Date.init()
+                    milsSinceLastRead = newReadTime.timeIntervalSince(lastTimeRead)
+                    if (lastRead == metadataObj.stringValue && milsSinceLastRead < 7) {
+                        return
+                    }
+                    lastTimeRead = newReadTime
+                    lastRead = metadataObj.stringValue
+                    
                     let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: metadataObj.stringValue)
                     pluginResult!.setKeepCallbackAs(true)
                     commandDelegate!.send(pluginResult, callbackId:self.barcodeReadCallback)
