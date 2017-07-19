@@ -55,6 +55,7 @@ import AVFoundation
     var height:CGFloat = 0.0
     var lastRead:String = ""
     var lastTimeRead: Date = Date.init()
+    var captureDevice: AVCaptureDevice?
     
     override func pluginInitialize() {
         super.pluginInitialize()
@@ -63,7 +64,15 @@ import AVFoundation
     }
     
     func startReading(_ command: CDVInvokedUrlCommand) {
-        let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+//        let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        let cameraDefault = (command.arguments[4] as AnyObject!) as? String ?? "back"
+        
+        if (cameraDefault == "front") {
+            captureDevice = ((AVCaptureDevice.devices() as? [AVCaptureDevice])?
+                .filter({ $0.hasMediaType(AVMediaTypeVideo) && $0.position == .front}).first)!
+        } else {
+            captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        }
 
         do {
             xPoint = CGFloat((command.arguments[0] as AnyObject!).floatValue) + self.webView.frame.origin.x
