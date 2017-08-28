@@ -34,13 +34,13 @@ import AVFoundation
         }
         
         func addPreviewLayer() {
-            videoPreviewLayer!.frame = self.bounds
+            videoPreviewLayer?.frame = self.bounds
             self.backgroundColor = UIColor.clear
             self.layer.addSublayer(videoPreviewLayer!)
         }
         
         func removePreviewLayer() {
-            self.videoPreviewLayer!.removeFromSuperlayer()
+            self.videoPreviewLayer?.removeFromSuperlayer()
             self.videoPreviewLayer = nil
         }
     }
