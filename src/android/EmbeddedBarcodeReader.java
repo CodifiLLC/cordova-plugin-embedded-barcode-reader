@@ -177,7 +177,7 @@ public class EmbeddedBarcodeReader extends CordovaPlugin implements EmbedQRReade
 				FragmentManager fragmentManager = cordova.getActivity().getFragmentManager();
 				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 				fragmentTransaction.add(containerView.getId(), fragment);
-				fragmentTransaction.commit();
+				fragmentTransaction.commitAllowingStateLoss();
 
 				Log.d(TAG, "camera fragment started");
 				cb.success("Camera started");
