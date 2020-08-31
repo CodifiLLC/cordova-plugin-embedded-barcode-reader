@@ -63,7 +63,7 @@ import AVFoundation
         self.webView!.isOpaque = false
     }
 
-    func startReading(_ command: CDVInvokedUrlCommand) {
+    @objc(startReading:) func startReading(_ command: CDVInvokedUrlCommand) {
 //        let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
         let cameraDefault = (command.arguments[4] as AnyObject!) as? String ?? "back"
 
@@ -191,7 +191,7 @@ import AVFoundation
         barcodeReadCallback = command.callbackId
     }
 
-    func stopReading(_ command: CDVInvokedUrlCommand) {
+    @objc(stopReading:) func stopReading(_ command: CDVInvokedUrlCommand) {
         //stop camera
         captureSession?.stopRunning()
         cameraPreview.removePreviewLayer()
@@ -201,15 +201,15 @@ import AVFoundation
         commandDelegate!.send(pluginResult, callbackId:command.callbackId)
     }
 
-    func hideCamera(_ command: CDVInvokedUrlCommand) {
+    @objc(hideCamera:) func hideCamera(_ command: CDVInvokedUrlCommand) {
         //hide camera
     }
 
-    func showCamera(_ command: CDVInvokedUrlCommand) {
+    @objc(showCamera:) func showCamera(_ command: CDVInvokedUrlCommand) {
         //show camera
     }
 
-    func switchCamera(_ command: CDVInvokedUrlCommand) {
+    @objc(switchCamera:) func switchCamera(_ command: CDVInvokedUrlCommand) {
         //switch camera
         if let session = captureSession {
             //Indicate that some changes will be made to the session
@@ -258,11 +258,11 @@ import AVFoundation
 
     }
 
-    func getSupportedFlashModes(_ command: CDVInvokedUrlCommand) {
+    @objc(getSupportedFlashModes:) func getSupportedFlashModes(_ command: CDVInvokedUrlCommand) {
         //get supported flash modes
     }
 
-    func setFlashMode(_ command: CDVInvokedUrlCommand) {
+    @objc(setFlashMode:) func setFlashMode(_ command: CDVInvokedUrlCommand) {
         //set flash mode
     }
 
