@@ -185,7 +185,7 @@ import AVFoundation
 
     //API methods for cordova
 
-    func startListening(_ command: CDVInvokedUrlCommand) {
+    @objc(startListening:) func startListening(_ command: CDVInvokedUrlCommand) {
         //add addListener
         print("listening")
         barcodeReadCallback = command.callbackId
