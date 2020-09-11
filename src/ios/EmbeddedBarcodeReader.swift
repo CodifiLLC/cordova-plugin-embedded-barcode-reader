@@ -133,7 +133,7 @@ import AVFoundation
         commandDelegate!.send(pluginResult, callbackId:command.callbackId)
     }
 
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection)  {
 
         var newReadTime: Date
         var milsSinceLastRead: Double
