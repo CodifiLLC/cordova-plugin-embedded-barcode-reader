@@ -65,20 +65,20 @@ import AVFoundation
 
     @objc(startReading:) func startReading(_ command: CDVInvokedUrlCommand) {
 //        let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
-        let cameraDefault = (command.arguments[4] as AnyObject!) as? String ?? "back"
+        let cameraDefault = (command.arguments[4] as AnyObject?) as? String ?? "back"
 
         if (cameraDefault == "front") {
-            captureDevice = ((AVCaptureDevice.devices() as? [AVCaptureDevice])?
-                .filter({ $0.hasMediaType(AVMediaType.video) && $0.position == .front}).first)!
+            captureDevice = ((AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified).devices)
+                .filter({ $0.hasMediaType(AVMediaType.video) && $0.position == .front}).first)
         } else {
             captureDevice = AVCaptureDevice.default(for: AVMediaType.video)
         }
 
         do {
-            xPoint = CGFloat((command.arguments[0] as AnyObject!).floatValue) + self.webView.frame.origin.x
-            yPoint = CGFloat((command.arguments[1] as AnyObject!).floatValue) + self.webView.frame.origin.y
-            width = CGFloat((command.arguments[2] as AnyObject!).floatValue)
-            height = CGFloat((command.arguments[3] as AnyObject!).floatValue)
+            xPoint = CGFloat((command.arguments[0] as AnyObject).floatValue) + self.webView.frame.origin.x
+            yPoint = CGFloat((command.arguments[1] as AnyObject).floatValue) + self.webView.frame.origin.y
+            width = CGFloat((command.arguments[2] as AnyObject).floatValue)
+            height = CGFloat((command.arguments[3] as AnyObject).floatValue)
 
             // Get an instance of the AVCaptureDeviceInput class using the previous device object.
             let input = try AVCaptureDeviceInput(device: captureDevice!)
@@ -105,7 +105,7 @@ import AVFoundation
             self.webView!.backgroundColor = UIColor.clear
             self.webView!.isOpaque = false
             self.webView!.superview!.addSubview(cameraPreview!)
-            self.webView!.superview!.bringSubview(toFront: self.webView)
+            self.webView!.superview!.bringSubviewToFront(self.webView)
 //            self.webView!.superview!.sendSubview(toBack: cameraPreview!)
             cameraPreview.addPreviewLayer();
 
@@ -122,7 +122,7 @@ import AVFoundation
             cameraPreview.qrCodeFrameView?.layer.borderColor = UIColor.green.cgColor
             cameraPreview.qrCodeFrameView?.layer.borderWidth = 2
             self.webView?.addSubview(cameraPreview.qrCodeFrameView!)
-            self.webView?.bringSubview(toFront: cameraPreview.qrCodeFrameView!)
+            self.webView?.bringSubviewToFront(cameraPreview.qrCodeFrameView!)
 
         } catch {
             // If any error occurs, simply print it out and don't continue any more.
@@ -138,8 +138,8 @@ import AVFoundation
         var newReadTime: Date
         var milsSinceLastRead: Double
 
-        // Check if the metadataObjects array is not nil and it contains at least one object.
-        if metadataObjects == nil || metadataObjects.count == 0 {
+        // Check if the metadataObjects array contains at least one object.
+        if metadataObjects.count == 0 {
             cameraPreview.qrCodeFrameView?.frame = CGRect.zero
             return
         }
@@ -171,14 +171,14 @@ import AVFoundation
     }
 
     func cameraWithPosition(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
-        if let potentialDevices = AVCaptureDevice.devices(for: AVMediaType.video) as? [AVCaptureDevice] {
-            for device in potentialDevices {
-                //let device = device as! AVCaptureDevice
-                if device.position == position {
-                    return device
-                }
+        let potentialDevices = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .unspecified).devices
+        for device in potentialDevices {
+            //let device = device as! AVCaptureDevice
+            if device.position == position {
+                return device
             }
         }
+
 
         return nil
     }
@@ -216,7 +216,7 @@ import AVFoundation
             session.beginConfiguration()
 
             //Remove existing input
-            let currentCameraInput: AVCaptureInput = (session.inputs.first as? AVCaptureInput)!
+            let currentCameraInput: AVCaptureInput = (session.inputs.first)!
 
             session.removeInput(currentCameraInput)
 
@@ -263,7 +263,34 @@ import AVFoundation
     }
 
     @objc(setFlashMode:) func setFlashMode(_ command: CDVInvokedUrlCommand) {
-        //set flash mode
+          print("Flash Mode");
+//          let errMsg = "";
+//
+//          let flashMode = (command.arguments[0] as AnyObject!) as? String;
+//
+//          if (captureSession != nil) {
+//            if (flashMode == "off") {
+//                [self.sessionManager, setFlashMode:AVCaptureFlashModeOff];
+//            } else if ([flashMode isEqual: "on"]) {
+//              [self.sessionManager setFlashMode:AVCaptureFlashModeOn];
+//            } else if ([flashMode isEqual: "auto"]) {
+//              [self.sessionManager setFlashMode:AVCaptureFlashModeAuto];
+//            } else if ([flashMode isEqual: "torch"]) {
+//              [self.sessionManager setTorchMode];
+//            } else {
+//              errMsg = "Flash Mode not supported";
+//            }
+//          } else {
+//            errMsg = "Session not started";
+//          }
+//
+//          if (errMsg) {
+//            let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: errMsg);
+//            commandDelegate!.send(pluginResult, callbackId:command.callbackId)
+//          } else {
+//            let pluginResult = CDVPluginResult(status: OK, messageAs: flashMode);
+//            commandDelegate!.send(pluginResult, callbackId:command.callbackId)
+//          }
     }
 
     func setPreviewSize(_ command: CDVInvokedUrlCommand) {
