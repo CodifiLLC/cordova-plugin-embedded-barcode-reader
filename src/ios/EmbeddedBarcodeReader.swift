@@ -53,7 +53,7 @@ import AVFoundation
     var yPoint:CGFloat = 0.0
     var width:CGFloat = 0.0
     var height:CGFloat = 0.0
-    var lastRead:String = ""
+    var lastRead:String? = nil
     var lastTimeRead: Date = Date.init()
     var captureDevice: AVCaptureDevice?
 
@@ -149,6 +149,7 @@ import AVFoundation
 
         if metadataObj.type == AVMetadataObject.ObjectType.qr {
             // If the found metadata is equal to the QR code metadata then update the status label's text and set the bounds
+            let currentObj = metadataObj.stringValue
             let barCodeObject = cameraPreview.videoPreviewLayer?.transformedMetadataObject(for: metadataObj)
             cameraPreview.qrCodeFrameView?.frame = CGRect.init(x: self.xPoint + barCodeObject!.bounds.minX, y: self.yPoint + barCodeObject!.bounds.minY, width: barCodeObject!.bounds.width, height: barCodeObject!.bounds.height)
 
@@ -156,7 +157,7 @@ import AVFoundation
                 if (self.barcodeReadCallback != nil) {
                     newReadTime = Date.init()
                     milsSinceLastRead = newReadTime.timeIntervalSince(lastTimeRead)
-                    if (lastRead == metadataObj.stringValue && milsSinceLastRead < 7) {
+                    if (lastRead == currentObj && milsSinceLastRead < 7) {
                         return
                     }
                     lastTimeRead = newReadTime
