@@ -197,6 +197,7 @@ import AVFoundation
         captureSession?.stopRunning()
         cameraPreview.removePreviewLayer()
         cameraPreview.videoPreviewLayer = nil
+        cameraPreview.qrCodeFrameView?.removeFromSuperview()
         self.barcodeReadCallback = nil
         let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "Camera Stopped")
         commandDelegate!.send(pluginResult, callbackId:command.callbackId)
